@@ -1,3 +1,23 @@
+.zone {
+    border: 3px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    background: rgba(102, 126, 234, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 5px;
+    padding: 30px 5px 5px 5px;
+}
+
+.zone:hover {
+    background-color: rgba(10, 128, 246, 0.25);
+}
+
+.zone.restricted {
+    background-color: rgba(242, 73, 73, 0.5);
+}
+
 .zone-label {
     position: absolute;
     top: 10px;
@@ -8,6 +28,15 @@
     border-radius: 6px;
     font-weight: 600;
     pointer-events: none;
+}
+
+.zone-label.restricted {
+    background: rgba(239, 68, 68, 0.9);
+}
+
+.addToZone:hover{
+    transform: scale(1.05);
+    background-color: #405ee7;
 }
 
 #floor-divisions{
