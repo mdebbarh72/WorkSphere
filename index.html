@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkSphere - Virtual Workspace</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body class="bg-gray-100 p-4">
+    <header class="max-w-screen mx-auto bg-white rounded-lg shadow-md p-4 ">
+        <div class="flex justify-center items-center gap-3">
+            <h1>WorkSphere</h1>
+            <span>|</span>
+            <span>Virtual Workspace</span>
+        </div>
+    </header>
+    <main class="flex flex-col mt-5 lg:flex-row gap-4 ">
+        
+        <div id="floorContainer" class="relative max-h-min" >
+            <img src="plan-69159a65c5684763515973.jpg" alt="floor plan">
+            <div id="floor-divisions" class="absolute inset-0 ">
+                <div id="conference" data-zone="conference" data-max="10" class="zone relative">
+                    <div class="zone-label text-[9px] lg:text-[11px]">conférence (0/10)</div>
+                    <button id="conf-btn" class="addToZone">+</button>
+                </div>
+                <div id="reception" data-zone="reception" data-max="10" data-restricted="Réceptionniste" class="zone restricted relative">
+                    <div class="zone-label restricted text-[9px] lg:text-[11px]">reception (0/10)</div>
+                    <button id="reception-btn" class="addToZone">+</button>
+                </div>
+                <div id="servers" data-zone="servers" data-max="5" data-restricted="Technicien IT" class="zone restricted relative">
+                    <div class="zone-label restricted text-[9px] lg:text-[11px]">Servers (0/10)</div>
+                    <button id="servers-btn" class="addToZone">+</button>
+                </div>
+                <div id="security" data-zone="security" data-max="5" data-restricted="Agent de sécurité" class="zone restricted relative">
+                    <div class="zone-label restricted text-[9px] lg:text-[11px]">Security (0/10)</div>
+                    <button id="security-btn" class="addToZone">+</button>
+                </div>
+                <div id="staff" data-zone="staff" data-max="10" class="zone relative">
+                    <div class="zone-label text-[9px] lg:text-[11px]">Staff (0/10)</div>
+                    <button id="staff-btn" class="addToZone">+</button>
+                </div>
+                <div id="archive" data-zone="archive" data-max="3" data-restricted="no-cleaning" class="zone restricted relative">
+                    <div class="zone-label restricted text-[9px] lg:text-[11px]">Archive (0/10)</div>
+                    <button id="archive-btn" class="addToZone">+</button>
+                </div>
+            </div>
+        </div>
+        <aside class=" bg-white rounded-lg shadow-md min-h-[85vh] space-y-4 min-w-40 sm:min-w-96 max-h-screen overflow-y-auto">
+
+            <button id="addWorkerBtn" class="block w-3xs mx-auto mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-700 transition duration-300 cursor-pointer">
+                Add New Worker
+            </button>
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-gray-800 mb-2">Personnel</h2>
+                <p class="text-sm text-gray-600">Total: <span id="totalCount" class="font-semibold">0</span></p>
+            </div>
+
+            <div class="w-[90%] mx-auto sm:w-[50%] lg:w-[90%]">
+
+                <input type="text" id="searchInput" placeholder="🔍 Rechercher..." 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            </div>
+
+            <div class="w-[90%] mx-auto sm:w-[50%] lg:w-[90%]">
+                <select id="roleFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    <option value="">📋 Tous les rôles</option>
+                    <option value="Réceptionniste">Réceptionniste</option>
+                    <option value="Technicien IT">Technicien IT</option>
+                    <option value="Agent de sécurité">Agent de sécurité</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Nettoyage">Nettoyage</option>
+                    <option value="Employé">Employé</option>
+                </select>
+            </div>
+
+            <div class="flexdontwork">
+                <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Non Assignés (<span id="unassignedCount">0</span>)</h3>
+                <div id="unassignedList" class="space-y-3 w-3/4">
+                    
+                </div>
+            </div>
+
+            
+            <div class="flexdontwork">
+                <h3 class="text-sm font-bold text-gray-600 mb-3 uppercase tracking-wide">Assignés (<span id="assignedCount">0</span>)</h3>
+                <div id="assignedList" class="space-y-3 max-w-3/4">
+                    
+                </div>
+            </div>
+        </aside>
+    </main >
+</body>
+</html>

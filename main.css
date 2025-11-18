@@ -1,0 +1,74 @@
+.zone-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+#floor-divisions{
+    display: grid;
+    height: 100%;
+    width: 100%;
+    grid-template-columns: 38% 16.5% 22.5% 22.5%;
+    grid-template-rows: 34% 32% 33% ;
+    grid-template-areas: 'conference . servers security'
+                        'reception . . .'
+                        'reception . staff archive'
+                        ;
+}
+
+#conference {
+    grid-area: conference;
+    text-align: center;
+}
+#reception  { 
+    grid-area: reception;
+    text-align: center;
+}
+#servers     { 
+    grid-area: servers;
+    text-align: center;
+ }
+#security   { 
+    grid-area: security;
+    text-align: center;
+}
+#staff      { 
+    grid-area: staff;
+    text-align: center;
+ }
+#archive    { 
+    grid-area: archive; 
+    text-align: center;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.flexdontwork{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-self: center;
+}
+
