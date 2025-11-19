@@ -271,3 +271,35 @@ function createEmployeeCard(emp){
                 </div>
             `
 }
+
+function renderFloorPlan() {
+    document.querySelectorAll('.employee-avatar').forEach(el => el.remove());
+
+    employees.filter(e => e.zone).forEach(emp => {
+        createAvatarOnPlan(emp);
+    });
+}
+
+function createAvatarOnPlan(emp) {
+    const avatar = document.createElement('div');
+    avatar.className = 'employee-avatar';
+    avatar.dataset.id = emp.id;
+    
+    const photoUrl = emp.photo || getDefaultPhoto(emp.gender || 'Homme');
+
+    avatar.innerHTML = `
+        <div class="avatar-circle">
+            <img src="${photoUrl}" alt="${emp.name}" onerror="this.src='${getDefaultPhoto(emp.gender || 'Homme')}'">
+        </div>
+        <div class="avatar-name">${emp.name.split(' ')[0]}</div>
+        <div class="avatar-remove" title="Retirer">×</div>
+    `;
+
+    avatar.querySelector('.avatar-circle').addEventListener('click', () => viewProfile(emp.id));
+    avatar.querySelector('.avatar-remove').addEventListener('click', (e) => {
+        e.stopPropagation();
+        unassignEmployee(emp.id);
+    });
+
+    document.getElementById(emp.zone).appendChild(avatar);
+}
