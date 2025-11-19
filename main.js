@@ -135,3 +135,65 @@ function getDefaultPhoto(gender) {
     return gender === 'Femme' ? DEFAULT_FEMALE : DEFAULT_MALE;
 }
 
+function validateField(input, regex, errorClass) {
+    const errorEl = document.querySelector(`.${errorClass}`);
+    if (input.value && !regex.test(input.value)) {
+        errorEl.classList.remove('hidden');
+        input.classList.add('border-red-500');
+        return false;
+    } else {
+        errorEl.classList.add('hidden');
+        input.classList.remove('border-red-500');
+        return true;
+    }
+}
+
+function updatePhotoPreview(previewId, url, gender) {
+    const preview = document.getElementById(previewId);
+    if (url && url.trim() !== '') {
+        const img = new Image();
+        img.onload = () => {
+            preview.src = url;
+        };
+        img.onerror = () => {
+            preview.src = gender === 'Femme' ? DEFAULT_FEMALE : DEFAULT_MALE;
+            if (url.startsWith('http')) {
+                showToast('Impossible de charger l\'image depuis l\'URL', 'warning');
+            } else {
+                showToast('Image locale non trouvée. Vérifiez le chemin.', 'warning');
+            }
+        };
+        img.src = url;
+    } else {
+        preview.src = gender === 'Femme' ? DEFAULT_FEMALE : DEFAULT_MALE;
+    }
+}
+
+function renderAll(){
+    renderSidebarLists();
+    renderFloorPlan();
+    updateCounts();
+    updateZoneCounts();
+}
+
+function updateCounts() {
+    const total = employees.length;
+    const unassigned = employees.filter(e => !e.zone).length;
+    const assigned = employees.filter(e => e.zone).length;
+
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('unassignedCount').textContent = unassigned;
+    document.getElementById('assignedCount').textContent = assigned;
+}
+
+function updateZoneCounts() {
+    document.querySelectorAll('.zone').forEach(zoneEl => {
+        const zoneName = zoneEl.dataset.zone;
+        const max = zoneEl.dataset.max;
+        const count = employees.filter(e => e.zone === zoneName).length;
+        const label = zoneEl.querySelector('.zone-label');
+        const isRestricted = zoneEl.classList.contains('restricted');
+        const icon = isRestricted ? '🔒 ' : '';
+        label.textContent = `${icon}${zoneName} (${count}/${max})`;
+    });
+}
