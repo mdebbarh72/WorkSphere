@@ -194,6 +194,149 @@
         </div>
         
     </section>
+
+    <section id="zoneSelectModal" class="modal">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Sélectionner un Employé</h2>
+                    <button id="closeZoneSelectModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="eligibleEmployeesList" class="space-y-2">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
     
+    <div id="profileModal" class="modal">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Profil de l'Employé</h2>
+                    <button id="closeProfileModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="profileContent"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="editProfileModal" class="modal">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Modifier l'Employé</h2>
+                    <button id="closeEditProfileModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="editProfileForm">
+                    <input type="hidden" id="editEmployeeId">
+                    
+                    <div class="mb-6 text-center">
+                        <img id="editPhotoPreview" src="" alt="Photo" class="w-32 h-32 rounded-full mx-auto mb-3 border-4 border-purple-200 object-cover">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nom complet *</label>
+                            <input type="text" id="editEmployeeName" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                                   placeholder="Ex: Debbarh Mohammed">
+                            <span class="text-xs text-red-500 hidden error-edit-name">Nom invalide (minimum prénom + nom)</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Rôle *</label>
+                            <select id="editEmployeeRole" required 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">Sélectionner</option>
+                                <option value="Réceptionniste">Réceptionniste</option>
+                                <option value="Technicien IT">Technicien IT</option>
+                                <option value="Agent de sécurité">Agent de sécurité</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Nettoyage">Nettoyage</option>
+                                <option value="Employé">Employé</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Genre *</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="editEmployeeGender" value="Homme" required class="mr-2">
+                                <span class="text-gray-700"> Homme</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="editEmployeeGender" value="Femme" required class="mr-2">
+                                <span class="text-gray-700"> Femme</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Photo (URL ou chemin local)</label>
+                        <input type="text" id="editEmployeePhoto" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                               placeholder="https://exemple.com/photo.jpg ou ./images/photo.jpg">
+                        <span class="text-xs text-gray-500 mt-1 block">Formats acceptés: URL (http://...) ou chemin local (./images/photo.jpg)</span>
+                        <span class="text-xs text-red-500 hidden error-edit-photo">Format invalide (URL ou chemin local avec extension valide)</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                            <input type="email" id="editEmployeeEmail" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <span class="text-xs text-red-500 hidden error-edit-email">Email invalide</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Téléphone *</label>
+                            <input type="tel" id="editEmployeePhone" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <span class="text-xs text-red-500 hidden error-edit-phone">Téléphone invalide</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="block text-sm font-semibold text-gray-700">Expériences professionnelles</label>
+                            <button type="button" id="editAddExperienceBtn" class="btn bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">
+                                + Ajouter
+                            </button>
+                        </div>
+                        <div id="editExperiencesList" class="space-y-3"></div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="submit" class="flex-1 btn bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600">
+                            💾 Enregistrer les modifications
+                        </button>
+                        <button type="button" id="cancelEditProfile" class="btn bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-400">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
 </body>
 </html>
