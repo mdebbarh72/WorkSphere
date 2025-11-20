@@ -396,3 +396,81 @@ function handleEmployeeSubmit(e) {
     renderAll();
     showToast(`${employeeData.name} ajouté(e) avec succès!`, 'success');
 }
+
+
+function viewProfile(empId) {
+    const emp = employees.find(e => e.id === empId);
+    if (!emp) return;
+
+    const roleClass = getRoleClass(emp.role);
+    const photoUrl = emp.photo || getDefaultPhoto(emp.gender || 'Homme');
+    
+    const content = `
+        <div class="text-center">
+            <img src="${photoUrl}" alt="${emp.name}" 
+                    class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-purple-200 object-cover"
+                    onerror="this.src='${getDefaultPhoto(emp.gender || 'Homme')}'">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">${emp.name}</h3>
+            <span class="role-badge ${roleClass}">${emp.role}</span>
+            ${emp.gender ? `<p class="text-sm text-gray-500 mt-2">${emp.gender === 'Homme' ? '👨' : '👩'} ${emp.gender}</p>` : ''}
+            
+            <div class="mt-6 text-left space-y-3">
+                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-gray-700">${emp.email}</span>
+                </div>
+                <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <span class="text-gray-700">${emp.phone}</span>
+                </div>
+                ${emp.zone ? `
+                <div class="flex items-center gap-3 bg-green-50 p-3 rounded-lg">
+                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="text-green-700 font-medium">📍 ${emp.zone}</span>
+                </div>
+                ` : '<div class="bg-orange-50 p-3 rounded-lg text-center"><p class="text-orange-600 font-medium">⚠️ Non assigné</p></div>'}
+            </div>
+
+            ${emp.experiences && emp.experiences.length > 0 ? `
+            <div class="mt-6">
+                <h4 class="text-lg font-bold text-gray-800 mb-3 text-left">Expériences professionnelles</h4>
+                <div class="space-y-3 text-left">
+                    ${emp.experiences.map(exp => `
+                        <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg border border-purple-200">
+                            <p class="font-semibold text-gray-800">${exp.position}</p>
+                            <p class="text-sm text-gray-600">${exp.company}</p>
+                            <p class="text-xs text-gray-500 mt-1">📅 ${exp.duration}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : '<div class="mt-6 text-gray-500 text-sm">Aucune expérience renseignée</div>'}
+
+            <div class="mt-6 flex gap-2">
+                <button onclick="openEditFromProfile('${emp.id}')" 
+                        class="flex-1 btn bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 font-semibold">
+                    ✏️ Modifier
+                </button>
+                ${emp.zone ? `
+                <button onclick="unassignEmployee('${emp.id}'); closeProfileModal();" 
+                        class="flex-1 btn bg-orange-500 text-white px-4 py-3 rounded-lg hover:bg-orange-600 font-semibold">
+                    ↩️ Retirer
+                </button>
+                ` : ''}
+            </div>
+        </div>
+    `;
+
+    document.getElementById('profileContent').innerHTML = content;
+    document.getElementById('profileModal').classList.add('active');
+}
+
+function closeProfileModal() {
+    document.getElementById('profileModal').classList.remove('active');
+}
