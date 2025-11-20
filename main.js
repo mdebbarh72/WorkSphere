@@ -303,3 +303,96 @@ function createAvatarOnPlan(emp) {
 
     document.getElementById(emp.zone).appendChild(avatar);
 }
+
+function openAddModal() {
+    currentEditingId = null;
+    document.getElementById('employeeForm').reset();
+    document.getElementById('photoPreview').src = DEFAULT_MALE;
+    document.getElementById('experiencesList').innerHTML = '';
+    document.getElementById('employeeModal').classList.add('active');
+    
+    document.querySelectorAll('.error-name, .error-email, .error-phone, .error-photo').forEach(el => el.classList.add('hidden'));
+}
+
+function closeEmployeeModal() {
+    document.getElementById('employeeModal').classList.remove('active');
+    currentEditingId = null;
+}
+
+function addExperienceField(listId, data = null) {
+    const expList = document.getElementById(listId);
+    const expItem = document.createElement('div');
+    expItem.className = 'border border-gray-300 rounded-lg p-3';
+    expItem.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-semibold text-gray-700">Expérience</span>
+            <button type="button" class="remove-experience text-red-500 hover:text-red-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <input type="text" class="exp-company w-full px-3 py-2 border border-gray-300 rounded mb-2" 
+                placeholder="Entreprise" value="${data?.company || ''}">
+        <input type="text" class="exp-position w-full px-3 py-2 border border-gray-300 rounded mb-2" 
+                placeholder="Poste" value="${data?.position || ''}">
+        <input type="text" class="exp-duration w-full px-3 py-2 border border-gray-300 rounded" 
+                placeholder="Durée (ex: 2020-2023)" value="${data?.duration || ''}">
+    `;
+
+    expItem.querySelector('.remove-experience').addEventListener('click', () => expItem.remove());
+    expList.appendChild(expItem);
+}
+
+function handleEmployeeSubmit(e) {
+    e.preventDefault();
+
+    const nameValid = validateField(document.getElementById('employeeName'), REGEX.name, 'error-name');
+    const emailValid = validateField(document.getElementById('employeeEmail'), REGEX.email, 'error-email');
+    const phoneValid = validateField(document.getElementById('employeePhone'), REGEX.phone, 'error-phone');
+    
+    const photoInput = document.getElementById('employeePhoto');
+    let photoValid = true;
+    if (photoInput.value && !REGEX.url.test(photoInput.value)) {
+        document.querySelector('.error-photo').classList.remove('hidden');
+        photoValid = false;
+    }
+
+    if (!nameValid || !emailValid || !phoneValid || !photoValid) {
+        showToast('Veuillez corriger les erreurs dans le formulaire', 'error');
+        return;
+    }
+
+    const experiences = [];
+    document.querySelectorAll('#experiencesList > div').forEach(item => {
+        const company = item.querySelector('.exp-company').value;
+        const position = item.querySelector('.exp-position').value;
+        const duration = item.querySelector('.exp-duration').value;
+        if (company || position || duration) {
+            experiences.push({company, position, duration});
+        }
+    });
+
+    const gender = document.querySelector('input[name="employeeGender"]:checked')?.value || 'Homme';
+    const photoUrl = document.getElementById('employeePhoto').value.trim();
+
+    const employeeData = {
+        name: document.getElementById('employeeName').value.trim(),
+        role: document.getElementById('employeeRole').value,
+        gender: gender,
+        photo: photoUrl || '',
+        email: document.getElementById('employeeEmail').value.trim(),
+        phone: document.getElementById('employeePhone').value.trim(),
+        experiences: experiences,
+        zone: null,
+        position: null
+    };
+
+    employeeData.id = generateId();
+    employees.push(employeeData);
+
+    saveData();
+    closeEmployeeModal();
+    renderAll();
+    showToast(`${employeeData.name} ajouté(e) avec succès!`, 'success');
+}
