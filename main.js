@@ -542,3 +542,85 @@ function deleteEmployee(empId) {
     }
 }
 
+function setupEventListeners() {
+    // Add Worker Button
+    document.getElementById('addWorkerBtn').addEventListener('click', openAddModal);
+    
+    // Employee Modal Controls
+    document.getElementById('closeModal').addEventListener('click', closeEmployeeModal);
+    document.getElementById('cancelModal').addEventListener('click', closeEmployeeModal);
+    document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
+    
+    // Photo Preview - Add Form
+    document.getElementById('employeePhoto').addEventListener('input', (e) => {
+        const url = e.target.value.trim();
+        const gender = document.querySelector('input[name="employeeGender"]:checked')?.value || 'Homme';
+        updatePhotoPreview('photoPreview', url, gender);
+    });
+    
+    // Gender Change - Add Form
+    document.querySelectorAll('input[name="employeeGender"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const url = document.getElementById('employeePhoto').value.trim();
+            updatePhotoPreview('photoPreview', url, e.target.value);
+        });
+    });
+
+    // Field Validation - Add Form
+    document.getElementById('employeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-name'));
+    document.getElementById('employeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-email'));
+    document.getElementById('employeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-phone'));
+    document.getElementById('employeePhoto').addEventListener('blur', (e) => validateField(e.target, REGEX.url, 'error-photo'));
+    
+    // Add Experience Button
+    document.getElementById('addExperienceBtn').addEventListener('click', () => addExperienceField('experiencesList'));
+    
+    // Profile Modal
+    document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
+    
+    // Photo Preview - Edit Form
+    document.getElementById('editEmployeePhoto').addEventListener('input', (e) => {
+        const url = e.target.value.trim();
+        const gender = document.querySelector('input[name="editEmployeeGender"]:checked')?.value || 'Homme';
+        updatePhotoPreview('editPhotoPreview', url, gender);
+    });
+    
+    // Gender Change - Edit Form
+    document.querySelectorAll('input[name="editEmployeeGender"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const url = document.getElementById('editEmployeePhoto').value.trim();
+            updatePhotoPreview('editPhotoPreview', url, e.target.value);
+        });
+    });
+
+    // Field Validation - Edit Form
+    document.getElementById('editEmployeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-edit-name'));
+    document.getElementById('editEmployeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-edit-email'));
+    document.getElementById('editEmployeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-edit-phone'));
+    
+    // Add Experience - Edit Form
+    document.getElementById('editAddExperienceBtn').addEventListener('click', () => addExperienceField('editExperiencesList'));
+    
+    // Zone Select Modal
+    document.getElementById('closeZoneSelectModal').addEventListener('click', closeZoneSelectModal);
+    
+    // Zone Add Buttons
+    document.querySelectorAll('.addToZone').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const zone = e.target.closest('.zone');
+            openZoneSelectModal(zone.dataset.zone);
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    setupEventListeners();
+    renderAll();
+});
+
+window.addEventListener('resize', () => {
+    renderFloorPlan();
+});
+
