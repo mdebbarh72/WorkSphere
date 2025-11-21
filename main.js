@@ -474,3 +474,71 @@ function viewProfile(empId) {
 function closeProfileModal() {
     document.getElementById('profileModal').classList.remove('active');
 }
+
+function openZoneSelectModal(zoneName) {
+    currentZoneForSelection = zoneName;
+    const zone = document.querySelector(`[data-zone="${zoneName}"]`);
+    const restricted = zone.dataset.restricted;
+
+    const eligible = employees.filter(emp => {
+        if (emp.zone) return false;
+        if (restricted === 'no-cleaning' && emp.role === 'Nettoyage') return false;
+        if (restricted && restricted !== 'no-cleaning') {
+            return emp.role === restricted || emp.role === 'Manager';
+        }
+        return true;
+    });
+
+    const list = document.getElementById('eligibleEmployeesList');
+    
+    if (eligible.length === 0) {
+        list.innerHTML = '<p class="text-center text-gray-500 py-4">Aucun employé disponible pour cette zone</p>';
+    } else {
+        list.innerHTML = eligible.map(emp => {
+            const roleClass = getRoleClass(emp.role);
+            const photoUrl = emp.photo || getDefaultPhoto(emp.gender || 'Homme');
+            return `
+                <div class="p-3 border border-gray-200 rounded-lg hover:border-purple-500 cursor-pointer transition-all"
+                        onclick="assignFromModal('${emp.id}')">
+                    <div class="flex items-center gap-3">
+                        <img src="${photoUrl}" alt="${emp.name}" 
+                                class="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                                onerror="this.src='${getDefaultPhoto(emp.gender || 'Homme')}'">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-800 text-sm">${emp.name}</h4>
+                            <span class="role-badge ${roleClass}">${emp.role}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    document.getElementById('zoneSelectModal').classList.add('active');
+}
+
+function closeZoneSelectModal() {
+    document.getElementById('zoneSelectModal').classList.remove('active');
+    currentZoneForSelection = null;
+}
+
+function assignFromModal(empId) {
+    if (!currentZoneForSelection) return;
+
+    assignEmployeeToZone(empId, currentZoneForSelection, null);
+    closeZoneSelectModal();
+    
+    const emp = employees.find(e => e.id === empId);
+    showToast(`${emp.name} assigné(e) à ${currentZoneForSelection}`, 'success');
+}
+
+function deleteEmployee(empId) {
+    const emp = employees.find(e => e.id === empId);
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${emp.name}?`)) {
+        employees = employees.filter(e => e.id !== empId);
+        saveData();
+        renderAll();
+        showToast(`${emp.name} supprimé(e)`, 'info');
+    }
+}
+
