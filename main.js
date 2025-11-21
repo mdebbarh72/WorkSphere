@@ -13,85 +13,11 @@ const REGEX = {
     url: /^(https?:\/\/.+|\.?\/?[\w\-\/]+\.(jpg|jpeg|png|gif|webp|svg))$/i
 };
 
-function generateId() {
-    return 'emp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-}
-
-function loadData() {
-    const saved = localStorage.getItem('workspherData');
-    if (saved) {
-        employees = JSON.parse(saved);
-    } else {
-        employees = [
-            {
-                id: generateId(),
-                name: "Marie Dupont",
-                role: "Réceptionniste",
-                gender: "Femme",
-                photo: "https://i.pravatar.cc/150?img=1",
-                email: "marie.dupont@worksphere.com",
-                phone: "+33 1 23 45 67 89",
-                experiences: [{company: "HotelLux", position: "Réceptionniste", duration: "2020-2023"}],
-                zone: null,
-                position: null
-            },
-            {
-                id: generateId(),
-                name: "Jean Martin",
-                role: "Technicien IT",
-                gender: "Homme",
-                photo: "https://i.pravatar.cc/150?img=12",
-                email: "jean.martin@worksphere.com",
-                phone: "+33 1 23 45 67 90",
-                experiences: [{company: "TechCorp", position: "Support IT", duration: "2019-2022"}],
-                zone: null,
-                position: null
-            },
-            {
-                id: generateId(),
-                name: "Sophie Bernard",
-                role: "Agent de sécurité",
-                gender: "Femme",
-                photo: "https://i.pravatar.cc/150?img=5",
-                email: "sophie.bernard@worksphere.com",
-                phone: "+33 1 23 45 67 91",
-                experiences: [{company: "SecurePro", position: "Agent", duration: "2018-2023"}],
-                zone: null,
-                position: null
-            },
-            {
-                id: generateId(),
-                name: "Lucas Moreau",
-                role: "Manager",
-                gender: "Homme",
-                photo: "https://i.pravatar.cc/150?img=13",
-                email: "lucas.moreau@worksphere.com",
-                phone: "+33 1 23 45 67 92",
-                experiences: [{company: "BizCorp", position: "Manager", duration: "2017-2023"}],
-                zone: null,
-                position: null
-            },
-            {
-                id: generateId(),
-                name: "Emma Petit",
-                role: "Nettoyage",
-                gender: "Femme",
-                photo: "https://i.pravatar.cc/150?img=9",
-                email: "emma.petit@worksphere.com",
-                phone: "+33 1 23 45 67 93",
-                experiences: [{company: "CleanPro", position: "Agent", duration: "2021-2023"}],
-                zone: null,
-                position: null
-            }
-        ];
-        saveData();
-    }
-}
-
-function saveData() {
-    localStorage.setItem('workspherData', JSON.stringify(employees));
-}
-
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    setupEventListeners();
+    renderAll();
+});
 
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
@@ -119,20 +45,169 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-function getRoleClass(role) {
-    const classes = {
-        'Réceptionniste': 'role-receptionist',
-        'Technicien IT': 'role-it',
-        'Agent de sécurité': 'role-security',
-        'Manager': 'role-manager',
-        'Nettoyage': 'role-cleaning',
-        'Employé': 'role-employee'
-    };
-    return classes[role] || 'role-employee';
+function loadData() {
+    const saved = localStorage.getItem('workspherData');
+    if (saved) {
+        employees = JSON.parse(saved);
+    } else {
+        // employees = await fetch('./employeesData.json')
+        employees = [
+                    {
+                        id: generateId(),
+                        name: "Marie Dupont",
+                        role: "Réceptionniste",
+                        gender: "Femme",
+                        photo: "https://i.pravatar.cc/150?img=1",
+                        email: "marie.dupont@worksphere.com",
+                        phone: "+33 1 23 45 67 89",
+                        experiences: [{company: "HotelLux", position: "Réceptionniste", duration: "2020-2023"}],
+                        zone: null,
+                        position: null
+                    },
+                    {
+                        id: generateId(),
+                        name: "Jean Martin",
+                        role: "Technicien IT",
+                        gender: "Homme",
+                        photo: "https://i.pravatar.cc/150?img=12",
+                        email: "jean.martin@worksphere.com",
+                        phone: "+33 1 23 45 67 90",
+                        experiences: [{company: "TechCorp", position: "Support IT", duration: "2019-2022"}],
+                        zone: null,
+                        position: null
+                    },
+                    {
+                        id: generateId(),
+                        name: "Sophie Bernard",
+                        role: "Agent de sécurité",
+                        gender: "Femme",
+                        photo: "https://i.pravatar.cc/150?img=5",
+                        email: "sophie.bernard@worksphere.com",
+                        phone: "+33 1 23 45 67 91",
+                        experiences: [{company: "SecurePro", position: "Agent", duration: "2018-2023"}],
+                        zone: null,
+                        position: null
+                    },
+                    {
+                        id: generateId(),
+                        name: "Lucas Moreau",
+                        role: "Manager",
+                        gender: "Homme",
+                        photo: "https://i.pravatar.cc/150?img=13",
+                        email: "lucas.moreau@worksphere.com",
+                        phone: "+33 1 23 45 67 92",
+                        experiences: [{company: "BizCorp", position: "Manager", duration: "2017-2023"}],
+                        zone: null,
+                        position: null
+                    },
+                    {
+                        id: generateId(),
+                        name: "Emma Petit",
+                        role: "Nettoyage",
+                        gender: "Femme",
+                        photo: "https://i.pravatar.cc/150?img=9",
+                        email: "emma.petit@worksphere.com",
+                        phone: "+33 1 23 45 67 93",
+                        experiences: [{company: "CleanPro", position: "Agent", duration: "2021-2023"}],
+                        zone: null,
+                        position: null
+                    }
+                ];
+        saveData();
+    }
 }
 
-function getDefaultPhoto(gender) {
-    return gender === 'Femme' ? DEFAULT_FEMALE : DEFAULT_MALE;
+// async function fetchData(dataPath)
+// {
+//     try{
+//         const response= await fetch(dataPath)
+//         if(!response.ok)
+//         {
+//             throw new Error(`Error, status: ${response.status}`)
+//         }
+//         const cardsData= await response.json()
+//         return cardsData;
+//     }
+
+//     catch(error){
+//         console.error("failed to fetch data: ",error)
+//         return [];
+//     }
+// }
+
+function saveData() {
+    localStorage.setItem('workspherData', JSON.stringify(employees));
+}
+
+function generateId() {
+    return 'emp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function setupEventListeners() {
+    document.getElementById('addWorkerBtn').addEventListener('click', openAddModal);
+    
+    document.getElementById('closeModal').addEventListener('click', closeEmployeeModal);
+    document.getElementById('cancelModal').addEventListener('click', closeEmployeeModal);
+    document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
+    
+    
+    document.getElementById('employeePhoto').addEventListener('input', (e) => {
+        const url = e.target.value.trim();
+        const gender = document.querySelector('input[name="employeeGender"]:checked')?.value || 'Homme';
+        updatePhotoPreview('photoPreview', url, gender);
+    });
+    
+    
+    document.querySelectorAll('input[name="employeeGender"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const url = document.getElementById('employeePhoto').value.trim();
+            updatePhotoPreview('photoPreview', url, e.target.value);
+        });
+    });
+
+    
+    document.getElementById('employeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-name'));
+    document.getElementById('employeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-email'));
+    document.getElementById('employeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-phone'));
+    document.getElementById('employeePhoto').addEventListener('blur', (e) => validateField(e.target, REGEX.url, 'error-photo'));
+    
+    document.getElementById('addExperienceBtn').addEventListener('click', () => addExperienceField('experiencesList'));
+    
+    document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
+    
+    
+    
+    document.getElementById('editEmployeePhoto').addEventListener('input', (e) => {
+        const url = e.target.value.trim();
+        const gender = document.querySelector('input[name="editEmployeeGender"]:checked')?.value || 'Homme';
+        updatePhotoPreview('editPhotoPreview', url, gender);
+    });
+    
+    document.querySelectorAll('input[name="editEmployeeGender"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const url = document.getElementById('editEmployeePhoto').value.trim();
+            updatePhotoPreview('editPhotoPreview', url, e.target.value);
+        });
+    });
+
+   
+    document.getElementById('editEmployeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-edit-name'));
+    document.getElementById('editEmployeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-edit-email'));
+    document.getElementById('editEmployeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-edit-phone'));
+    
+    document.getElementById('editAddExperienceBtn').addEventListener('click', () => addExperienceField('editExperiencesList'));
+    
+    document.getElementById('closeZoneSelectModal').addEventListener('click', closeZoneSelectModal);
+    
+
+    document.querySelectorAll('.addToZone').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const zone = e.target.closest('.zone');
+            openZoneSelectModal(zone.dataset.zone);
+        });
+    });
+
 }
 
 function validateField(input, regex, errorClass) {
@@ -169,33 +244,15 @@ function updatePhotoPreview(previewId, url, gender) {
     }
 }
 
+function getDefaultPhoto(gender) {
+    return gender === 'Femme' ? DEFAULT_FEMALE : DEFAULT_MALE;
+}
+
 function renderAll(){
     renderSidebarLists();
     renderFloorPlan();
     updateCounts();
     updateZoneCounts();
-}
-
-function updateCounts() {
-    const total = employees.length;
-    const unassigned = employees.filter(e => !e.zone).length;
-    const assigned = employees.filter(e => e.zone).length;
-
-    document.getElementById('totalCount').textContent = total;
-    document.getElementById('unassignedCount').textContent = unassigned;
-    document.getElementById('assignedCount').textContent = assigned;
-}
-
-function updateZoneCounts() {
-    document.querySelectorAll('.zone').forEach(zoneEl => {
-        const zoneName = zoneEl.dataset.zone;
-        const max = zoneEl.dataset.max;
-        const count = employees.filter(e => e.zone === zoneName).length;
-        const label = zoneEl.querySelector('.zone-label');
-        const isRestricted = zoneEl.classList.contains('restricted');
-        const icon = isRestricted ? '🔒 ' : '';
-        label.textContent = `${icon}${zoneName} (${count}/${max})`;
-    });
 }
 
 function renderSidebarLists(){
@@ -232,6 +289,8 @@ function renderSidebarLists(){
     assignedList.innerHTML= assigned.length>0? 
     assigned.map(emp => createEmployeeCard(emp)).join(''):
     '<p class="text-sm text-gray-500 text-center py-4">Aucun employé</p>'
+
+    
 }
 
 function createEmployeeCard(emp){
@@ -272,6 +331,18 @@ function createEmployeeCard(emp){
             `
 }
 
+function getRoleClass(role) {
+    const classes = {
+        'Réceptionniste': 'role-receptionist',
+        'Technicien IT': 'role-it',
+        'Agent de sécurité': 'role-security',
+        'Manager': 'role-manager',
+        'Nettoyage': 'role-cleaning',
+        'Employé': 'role-employee'
+    };
+    return classes[role] || 'role-employee';
+}
+
 function renderFloorPlan() {
     document.querySelectorAll('.employee-avatar').forEach(el => el.remove());
 
@@ -285,6 +356,7 @@ function createAvatarOnPlan(emp) {
     avatar.className = 'employee-avatar';
     avatar.dataset.id = emp.id;
     
+
     const photoUrl = emp.photo || getDefaultPhoto(emp.gender || 'Homme');
 
     avatar.innerHTML = `
@@ -304,12 +376,77 @@ function createAvatarOnPlan(emp) {
     document.getElementById(emp.zone).appendChild(avatar);
 }
 
+function canAssignToZone(emp, zoneName) {
+    const zone = document.querySelector(`[data-zone="${zoneName}"]`);
+    const restricted = zone.dataset.restricted;
+    const max = parseInt(zone.dataset.max);
+    const currentCount = employees.filter(e => e.zone === zoneName && e.id !== emp.id).length;
+
+    if (currentCount >= max) {
+        return false;
+    }
+
+    if (restricted === 'no-cleaning' && emp.role === 'Nettoyage') {
+        return false;
+    }
+
+    if (restricted && restricted !== 'no-cleaning') {
+        return emp.role === restricted || emp.role === 'Manager';
+    }
+
+    return true;
+}
+
+function assignEmployeeToZone(empId, zone, position) {
+    const emp = employees.find(e => e.id === empId);
+    if (emp) {
+        emp.zone = zone;
+        emp.position = position;
+        saveData();
+        renderAll();
+    }
+}
+
+function unassignEmployee(empId) {
+    const emp = employees.find(e => e.id === empId);
+    if (emp) {
+        emp.zone = null;
+        emp.position = null;
+        saveData();
+        renderAll();
+        showToast(`${emp.name} retiré(e) de la zone`, 'info');
+    }
+}
+
+function updateCounts() {
+    const total = employees.length;
+    const unassigned = employees.filter(e => !e.zone).length;
+    const assigned = employees.filter(e => e.zone).length;
+
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('unassignedCount').textContent = unassigned;
+    document.getElementById('assignedCount').textContent = assigned;
+}
+
+function updateZoneCounts() {
+    document.querySelectorAll('.zone').forEach(zoneEl => {
+        const zoneName = zoneEl.dataset.zone;
+        const max = zoneEl.dataset.max;
+        const count = employees.filter(e => e.zone === zoneName).length;
+        const label = zoneEl.querySelector('.zone-label');
+        const isRestricted = zoneEl.classList.contains('restricted');
+        const icon = isRestricted ? '🔒 ' : '';
+        label.textContent = `${icon}${zoneName} (${count}/${max})`;
+    });
+}
+
 function openAddModal() {
     currentEditingId = null;
     document.getElementById('employeeForm').reset();
     document.getElementById('photoPreview').src = DEFAULT_MALE;
     document.getElementById('experiencesList').innerHTML = '';
     document.getElementById('employeeModal').classList.add('active');
+    
     
     document.querySelectorAll('.error-name, .error-email, .error-phone, .error-photo').forEach(el => el.classList.add('hidden'));
 }
@@ -347,6 +484,7 @@ function addExperienceField(listId, data = null) {
 function handleEmployeeSubmit(e) {
     e.preventDefault();
 
+    
     const nameValid = validateField(document.getElementById('employeeName'), REGEX.name, 'error-name');
     const emailValid = validateField(document.getElementById('employeeEmail'), REGEX.email, 'error-email');
     const phoneValid = validateField(document.getElementById('employeePhone'), REGEX.phone, 'error-phone');
@@ -397,6 +535,15 @@ function handleEmployeeSubmit(e) {
     showToast(`${employeeData.name} ajouté(e) avec succès!`, 'success');
 }
 
+function deleteEmployee(empId) {
+    const emp = employees.find(e => e.id === empId);
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${emp.name}?`)) {
+        employees = employees.filter(e => e.id !== empId);
+        saveData();
+        renderAll();
+        showToast(`${emp.name} supprimé(e)`, 'info');
+    }
+}
 
 function viewProfile(empId) {
     const emp = employees.find(e => e.id === empId);
@@ -532,95 +679,6 @@ function assignFromModal(empId) {
     showToast(`${emp.name} assigné(e) à ${currentZoneForSelection}`, 'success');
 }
 
-function deleteEmployee(empId) {
-    const emp = employees.find(e => e.id === empId);
-    if (confirm(`Êtes-vous sûr de vouloir supprimer ${emp.name}?`)) {
-        employees = employees.filter(e => e.id !== empId);
-        saveData();
-        renderAll();
-        showToast(`${emp.name} supprimé(e)`, 'info');
-    }
-}
-
-function setupEventListeners() {
-    // Add Worker Button
-    document.getElementById('addWorkerBtn').addEventListener('click', openAddModal);
-    
-    // Employee Modal Controls
-    document.getElementById('closeModal').addEventListener('click', closeEmployeeModal);
-    document.getElementById('cancelModal').addEventListener('click', closeEmployeeModal);
-    document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
-    
-    // Photo Preview - Add Form
-    document.getElementById('employeePhoto').addEventListener('input', (e) => {
-        const url = e.target.value.trim();
-        const gender = document.querySelector('input[name="employeeGender"]:checked')?.value || 'Homme';
-        updatePhotoPreview('photoPreview', url, gender);
-    });
-    
-    // Gender Change - Add Form
-    document.querySelectorAll('input[name="employeeGender"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const url = document.getElementById('employeePhoto').value.trim();
-            updatePhotoPreview('photoPreview', url, e.target.value);
-        });
-    });
-
-    // Field Validation - Add Form
-    document.getElementById('employeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-name'));
-    document.getElementById('employeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-email'));
-    document.getElementById('employeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-phone'));
-    document.getElementById('employeePhoto').addEventListener('blur', (e) => validateField(e.target, REGEX.url, 'error-photo'));
-    
-    // Add Experience Button
-    document.getElementById('addExperienceBtn').addEventListener('click', () => addExperienceField('experiencesList'));
-    
-    // Profile Modal
-    document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
-    
-    // Photo Preview - Edit Form
-    document.getElementById('editEmployeePhoto').addEventListener('input', (e) => {
-        const url = e.target.value.trim();
-        const gender = document.querySelector('input[name="editEmployeeGender"]:checked')?.value || 'Homme';
-        updatePhotoPreview('editPhotoPreview', url, gender);
-    });
-    
-    // Gender Change - Edit Form
-    document.querySelectorAll('input[name="editEmployeeGender"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const url = document.getElementById('editEmployeePhoto').value.trim();
-            updatePhotoPreview('editPhotoPreview', url, e.target.value);
-        });
-    });
-
-    // Field Validation - Edit Form
-    document.getElementById('editEmployeeName').addEventListener('blur', (e) => validateField(e.target, REGEX.name, 'error-edit-name'));
-    document.getElementById('editEmployeeEmail').addEventListener('blur', (e) => validateField(e.target, REGEX.email, 'error-edit-email'));
-    document.getElementById('editEmployeePhone').addEventListener('blur', (e) => validateField(e.target, REGEX.phone, 'error-edit-phone'));
-    
-    // Add Experience - Edit Form
-    document.getElementById('editAddExperienceBtn').addEventListener('click', () => addExperienceField('editExperiencesList'));
-    
-    // Zone Select Modal
-    document.getElementById('closeZoneSelectModal').addEventListener('click', closeZoneSelectModal);
-    
-    // Zone Add Buttons
-    document.querySelectorAll('.addToZone').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const zone = e.target.closest('.zone');
-            openZoneSelectModal(zone.dataset.zone);
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadData();
-    setupEventListeners();
-    renderAll();
-});
-
 window.addEventListener('resize', () => {
     renderFloorPlan();
 });
-
